@@ -9,28 +9,16 @@ from datetime import datetime
 js_code = """\
 #!/usr/bin/osascript -l JavaScript
 
-// https://apple.stackexchange.com/questions/338659/applescript-bookmark-all-tabs-in-all-windows-in-safari
-
 function run(input, parameters) {
-    var tablist = [];
-    var Safari = Application('Safari');
-    Safari.includeStandardAdditions = true;
-//    Safari.activate();
-    var windows = Safari.windows();
-    for(let iw=0, wsize=windows.length; iw<wsize; iw++) {
-        var wintabs = [];
-        var tabs = windows[iw].tabs();
-        if (!tabs) continue;
-        for(let it=0, tsize=tabs.length; it<tsize; it++) {
-            if( tabs[it].url() ) {
-                wintabs.push( {"name": tabs[it].name(), "url": tabs[it].url()} );
-            }
-        }
-        if( wintabs.length ) {
-            tablist.push(...wintabs);  // concatinates array https://stackoverflow.com/a/67738439/881330
-        }
-    }
-    return JSON.stringify(tablist);
+    var safariTabs = [];
+    var safari = Application('Safari');
+
+    safari.windows().forEach(function (window) {
+        window.tabs().forEach(function (tab) {
+            safariTabs.push({ "name": tab.name(), "url": tab.url() });  // NB: we can get here duplicate pinned tabs
+        })
+    })
+    return JSON.stringify(safariTabs);
 }
 """
 
