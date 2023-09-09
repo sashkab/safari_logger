@@ -53,7 +53,7 @@ def main():
 
     try:
         out = subprocess.check_output(['git', f'--git-dir={repo_path.joinpath(".git")}', f'--work-tree={repo_path}',
-                                       'commit', '-am', f'Safari {dte:%Y.%m.%d %H:%M:%S}'], stderr=subprocess.STDOUT)
+                                       'commit', '-am', f'Safari {dte:%Y.%m.%d %H:%M:%S} -- {len(j)} tabs open'], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as exc:
         stdout = exc.stdout.decode().strip()
         if 'nothing to commit, working tree clean' in stdout:
